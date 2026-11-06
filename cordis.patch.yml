@@ -1,0 +1,5 @@
+# dsh-session-search 的 bundle 层：往装配里插一行宿主插件。
+- insert:
+    - id: session-search
+      name: 'dsh-session-search'
+      config: {}

@@ -1,0 +1,43 @@
+{
+  "name": "dsh-session-search",
+  "version": "0.1.0",
+  "description": "在 DSH 本地历史会话里按关键字检索过往对话，并导出命中会话的对话文本",
+  "type": "module",
+  "main": "./lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "license": "MIT",
+  "author": "louisding9527",
+  "homepage": "https://github.com/louisding9527/dsh-session-search#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/louisding9527/dsh-session-search.git"
+  },
+  "bugs": {
+    "url": "https://github.com/louisding9527/dsh-session-search/issues"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "session",
+    "search",
+    "history"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}
