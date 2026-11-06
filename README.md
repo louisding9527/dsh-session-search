@@ -8,12 +8,18 @@ Keyword search over your local **DeepSeek Harness (dsh)** chat history — ask "
 
 DSH stores every session under `~/.dsh/sessions/<encoded-cwd>/<session-id>/session.v4.jsonl.zstd`. This plugin adds two model-facing tools that read those logs directly:
 
-| Tool | Purpose |
+| Tool / UI | Purpose |
 |---|---|
 | `session_search` | Keyword search across sessions; returns matching sessions with timestamps and excerpts |
 | `session_read` | Dump one session's dialogue, optionally filtered by keyword |
+| Sidebar entry | A magnifier in the sidebar panel list opens a search dialog |
+| Shortcut | `Ctrl+Shift+F` (`Cmd+Shift+F` on macOS) opens the same dialog; rebind it on the Settings → Shortcuts page |
 
 Both answer from **local files only** — nothing is uploaded, no index is built.
+
+The dialog searches titles and message bodies together. Space-separated terms must all appear. Click a result to expand the matching turns inside the dialog.
+
+The host serves the dialog through two same-origin read-only routes: `GET /session-search/query` and `GET /session-search/read`.
 
 ## Install / 安装
 
@@ -43,7 +49,7 @@ dsh plugin add https://github.com/louisding9527/dsh-session-search/releases/late
 
 The package's own `cordis.patch.yml` inserts the same row, so a bundle install needs no manual edit.
 
-Restart dsh after a manual patch-layer edit.
+Restart dsh after a manual patch-layer edit. **The browser half is scanned when the host starts**, so restart dsh (or reload the page) before the sidebar entry and the shortcut appear — the host half, including the two routes, works immediately.
 
 ## Tools / 工具说明
 
@@ -73,6 +79,7 @@ Takes a `session_id` (full or prefix), an optional `query` to keep only matching
 - Files are bucketed round-robin over newest-first order, so an early stop covers the same time range across children.
 - `messages` mode skips context injection: mnemon memory snapshots carry `source.kind: "dsh-mnemon"` instead of `"user"`, and system prompts / reasoning / tool output are excluded too — otherwise every search would match the injected memory first.
 - Very large events (tool results) get a whole-line substring pre-check before `JSON.parse`.
+- **Shortcut conflicts are probed before registration.** The client asks the shortcuts service (`describeBinding`) whether the intended combination is reserved or already overlapping, and walks a fallback list (`Ctrl+Shift+F` → `Ctrl+Shift+K` → `Ctrl+Alt+F`) until one is free. If every candidate is taken, the dialog still opens from the sidebar; the plugin never fails to load over a key. `web:linux` is left unbound because the service only admits a fixed set of combinations there. Whatever key wins still appears on the Settings → Shortcuts page, where the user can rebind it.
 
 ## Limitations / 已知限制
 
