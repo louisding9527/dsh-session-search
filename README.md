@@ -13,7 +13,7 @@ DSH stores every session under `~/.dsh/sessions/<encoded-cwd>/<session-id>/sessi
 | `session_search` | Keyword search across sessions; returns matching sessions with timestamps and excerpts |
 | `session_read` | Dump one session's dialogue, optionally filtered by keyword |
 | Sidebar entry | A magnifier row at the sidebar foot opens a search dialog |
-| Shortcut | `Ctrl+Shift+K` (`Cmd+Shift+K` on macOS) opens the same dialog; rebind it on the Settings → Shortcuts page |
+| Shortcut | `Ctrl+Shift+K` (`Cmd+Shift+K` on macOS). Change it on the plugin page: Settings → Plugins → dsh-session-search → 修改 |
 
 Both answer from **local files only** — nothing is uploaded, no index is built.
 
@@ -89,7 +89,9 @@ Takes a `session_id` (full or prefix), an optional `query` to keep only matching
 - Files are bucketed round-robin over newest-first order, so an early stop covers the same time range across children.
 - `messages` mode skips context injection: mnemon memory snapshots carry `source.kind: "dsh-mnemon"` instead of `"user"`, and system prompts / reasoning / tool output are excluded too — otherwise every search would match the injected memory first.
 - Very large events (tool results) get a whole-line substring pre-check before `JSON.parse`.
-- **Shortcut conflicts are probed before registration.** The client asks the shortcuts service (`describeBinding`) whether the intended combination is reserved or already overlapping, and walks a fallback list (`Ctrl+Shift+K` → `Ctrl+Shift+L` → `Ctrl+Alt+F`) until one is free. If every candidate is taken, the dialog still opens from the sidebar foot; the plugin never fails to load over a key. `Ctrl+Shift+F` was deliberately dropped: Microsoft Pinyin on Windows claims it for Simplified/Traditional switching, so the browser never sees it and no in-app conflict check can notice. `web:linux` is left unbound because the service only admits a fixed set of combinations there. Whatever key wins still appears on the Settings → Shortcuts page, where the user can rebind it.
+- **The shortcut is owned by the plugin.** A `window` keydown listener is the primary path, so the dialog opens even when DSH's shortcuts service never registers the command. The chord lives in `localStorage` (`dsh.session-search.hotkey.v1`), and the plugin page records a new one in place — press the combination, it saves immediately. The recorder warns when the chosen chord collides with a known built-in action (`Ctrl+N`, `Ctrl+K`, `Ctrl+Alt+F`, `Ctrl+Shift+A`, `Ctrl+Alt+G`).
+- The plugin also tries to register the command in DSH's own shortcut catalog, which would list it on Settings → Shortcuts. If that registration is rejected, only the plugin-owned listener remains, and the dialog still opens.
+- **`messages` mode skips context injection.** Memory snapshots (`source.kind: "dsh-mnemon"`), system prompts, reasoning and tool output are excluded, so a keyword matches real dialogue instead of the preamble every turn carries — without that filter every query hits the injected memory first.
 
 ## Limitations / 已知限制
 

@@ -1,6 +1,6 @@
 {
   "name": "dsh-session-search",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "在 DSH 本地历史会话里按关键字检索过往对话，并导出命中会话的对话文本",
   "type": "module",
   "main": "./lib/index.js",
