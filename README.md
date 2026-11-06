@@ -23,19 +23,23 @@ The host serves the dialog through two same-origin read-only routes: `GET /sessi
 
 ## Install / 安装
 
-**From the plugin market** (once listed): search `session-search`, click install.
+Requires a dsh build with the web client (0.2.x). Nothing else is needed: no npm package, no build step, no extra dependency.
 
-**From this repo, without npm:**
+**Desktop app.** Open Settings → Plugins, and install from the repository URL or the tarball URL below. Restart dsh afterwards so the browser half is scanned.
+
+**CLI.** Pick one of the two specs:
 
 ```sh
+# from the repository (pnpm fetches the codeload tarball)
 dsh plugin add github:louisding9527/dsh-session-search
-```
 
-**From a prebuilt tarball** (skips any build step):
-
-```sh
+# or from the prebuilt Release tarball (no build step at all)
 dsh plugin add https://github.com/louisding9527/dsh-session-search/releases/latest/download/dsh-session-search.tgz
 ```
+
+Add `--profile <name>` when the target is not the default profile (`desktop` for the desktop app, `web` for a headless dsh).
+
+**Plugin market.** Once the [listing PR](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin/pull/12514) is merged, search `session-search` in the market and click install.
 
 **Local checkout** (development): point the profile at this directory.
 
@@ -50,6 +54,12 @@ dsh plugin add https://github.com/louisding9527/dsh-session-search/releases/late
 The package's own `cordis.patch.yml` inserts the same row, so a bundle install needs no manual edit.
 
 Restart dsh after a manual patch-layer edit. **The browser half is scanned when the host starts**, so restart dsh (or reload the page) before the sidebar entry and the shortcut appear — the host half, including the two routes, works immediately.
+
+### After installing / 装完确认
+
+The agent gets `session_search` and `session_read`. The UI gets a magnifier row at the sidebar foot. `Ctrl+Shift+K` opens the same dialog; rebind it on Settings → Shortcuts.
+
+If the sidebar row is missing, the browser half did not load: restart dsh (not just the page) and check Settings → Plugins for a load error.
 
 ## Tools / 工具说明
 
