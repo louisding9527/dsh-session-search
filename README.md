@@ -12,8 +12,8 @@ DSH stores every session under `~/.dsh/sessions/<encoded-cwd>/<session-id>/sessi
 |---|---|
 | `session_search` | Keyword search across sessions; returns matching sessions with timestamps and excerpts |
 | `session_read` | Dump one session's dialogue, optionally filtered by keyword |
-| Sidebar entry | A magnifier in the sidebar panel list opens a search dialog |
-| Shortcut | `Ctrl+Shift+F` (`Cmd+Shift+F` on macOS) opens the same dialog; rebind it on the Settings → Shortcuts page |
+| Sidebar entry | A magnifier row at the sidebar foot opens a search dialog |
+| Shortcut | `Ctrl+Shift+K` (`Cmd+Shift+K` on macOS) opens the same dialog; rebind it on the Settings → Shortcuts page |
 
 Both answer from **local files only** — nothing is uploaded, no index is built.
 
@@ -79,7 +79,7 @@ Takes a `session_id` (full or prefix), an optional `query` to keep only matching
 - Files are bucketed round-robin over newest-first order, so an early stop covers the same time range across children.
 - `messages` mode skips context injection: mnemon memory snapshots carry `source.kind: "dsh-mnemon"` instead of `"user"`, and system prompts / reasoning / tool output are excluded too — otherwise every search would match the injected memory first.
 - Very large events (tool results) get a whole-line substring pre-check before `JSON.parse`.
-- **Shortcut conflicts are probed before registration.** The client asks the shortcuts service (`describeBinding`) whether the intended combination is reserved or already overlapping, and walks a fallback list (`Ctrl+Shift+F` → `Ctrl+Shift+K` → `Ctrl+Alt+F`) until one is free. If every candidate is taken, the dialog still opens from the sidebar; the plugin never fails to load over a key. `web:linux` is left unbound because the service only admits a fixed set of combinations there. Whatever key wins still appears on the Settings → Shortcuts page, where the user can rebind it.
+- **Shortcut conflicts are probed before registration.** The client asks the shortcuts service (`describeBinding`) whether the intended combination is reserved or already overlapping, and walks a fallback list (`Ctrl+Shift+K` → `Ctrl+Shift+L` → `Ctrl+Alt+F`) until one is free. If every candidate is taken, the dialog still opens from the sidebar foot; the plugin never fails to load over a key. `Ctrl+Shift+F` was deliberately dropped: Microsoft Pinyin on Windows claims it for Simplified/Traditional switching, so the browser never sees it and no in-app conflict check can notice. `web:linux` is left unbound because the service only admits a fixed set of combinations there. Whatever key wins still appears on the Settings → Shortcuts page, where the user can rebind it.
 
 ## Limitations / 已知限制
 
